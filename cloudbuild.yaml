@@ -1,0 +1,27 @@
+steps:
+- id: "terraform init"
+  name: 'gcr.io/${PROJECT_ID}/terraform'
+  dir: ./
+  args:
+    - 'init'
+    - "-backend-config=bucket=${_BUCKET}"
+    - '-reconfigure'
+  env:
+    - "TF_VAR_project=${PROJECT_ID}"
+- id: "terraform plan"
+  name: 'gcr.io/${PROJECT_ID}/terraform'
+  dir: ./
+  args:
+    - 'plan'
+  env:
+    - "TF_VAR_project=${PROJECT_ID}"
+- id: "terraform apply"
+  name: 'gcr.io/${PROJECT_ID}/terraform'
+  dir: ./
+  args: ['apply','-auto-approve']
+  env:
+    - "TF_VAR_project=${PROJECT_ID}"
+
+substitutions:
+    _BUCKET: functions_helloworld
+timeout: 1800s
